@@ -15,11 +15,11 @@
       <div class="text-lg font-bold">
         <a href="#" class="text-blue-600 hover:text-blue-800">Forum</a>
       </div>
-      <div class="space-x-4">
-        <a href="#" class="text-gray-600 hover:text-blue-600">Home</a>
-        <a href="#" class="text-gray-600 hover:text-blue-600">About</a>
-        <a href="#" class="text-gray-600 hover:text-blue-600">Contact</a>
-        <a href="#" class="text-gray-600 hover:text-blue-600">Profile</a>
+      <div class="space-x-4" id="nav-buttons">
+        <span id="user-info" class="hidden text-gray-600"></span>
+        <button id="logout-btn" class="hidden text-gray-600 hover:text-blue-600">Salir</button>
+        <a href="/login" id="login-btn" class="text-gray-600 hover:text-blue-600">Iniciar sesión</a>
+        <a href="/register" id="register-btn" class="text-gray-600 hover:text-blue-600">Registrarse</a>
       </div>
     </div>
   </nav>
@@ -28,15 +28,64 @@
     <app-root></app-root>
   </div>
 
-  <footer class="bg-gray-800 text-white py-6 mt-10">
+  <footer class="bg-gray-800 text-white py-6 mt-10 relative z-0">
     <div class="container mx-auto text-center">
-      <p class="mb-2">© 2024 Forum Name. All rights reserved.</p>
+      <p class="mb-2">© 2024 Nombre_Foro. Todos los derechos reservados.</p>
       <div class="space-x-4">
-        <a href="#" class="hover:underline">Privacy Policy</a>
-        <a href="#" class="hover:underline">Terms of Service</a>
-        <a href="#" class="hover:underline">Support</a>
+        <a href="#" class="hover:underline">Política de privacidad</a>
+        <a href="#" class="hover:underline">Términos del servicio</a>
+        <a href="#" class="hover:underline">Soporte</a>
       </div>
     </div>
   </footer>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.js"></script>
+  <script>
+    function updateNavbar() {
+      const userInfo = document.getElementById('user-info');
+      const logoutBtn = document.getElementById('logout-btn');
+      const loginBtn = document.getElementById('login-btn');
+      const registerBtn = document.getElementById('register-btn');
+
+      const token = localStorage.getItem('token');
+      if (token) {
+        userInfo.textContent = `Bienvenido, ${getUsername()}`; 
+        userInfo.classList.remove('hidden');
+        logoutBtn.classList.remove('hidden');
+        loginBtn.classList.add('hidden');
+        registerBtn.classList.add('hidden');
+
+
+        logoutBtn.onclick = () => {
+          localStorage.removeItem('token'); 
+          updateNavbar(); 
+          window.location.href = '/'; 
+        };
+      } else {
+        userInfo.classList.add('hidden');
+        logoutBtn.classList.add('hidden');
+        loginBtn.classList.remove('hidden');
+        registerBtn.classList.remove('hidden');
+      }
+    }
+
+    function getUsername() {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const decodedToken = jwt_decode(token);
+        return decodedToken.username || 'Usuario';
+      }
+      return 'Usuario'; 
+    }
+
+    updateNavbar();
+
+    window.addEventListener('message', function(event) {
+      if (event.data.type === 'user-updated') {
+        updateNavbar();
+      }
+    });
+  </script>
 </body>
 </html>

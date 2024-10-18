@@ -1,10 +1,24 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/**/*.{html,ts}", 
+    './src/**/*.{html,ts}', 
   ],
+  
+  darkMode: false, 
+
   theme: {
-    extend: {},
+    extend: {
+    },
   },
-  plugins: [],
-}
+
+  variants: {
+    extend: {
+    },
+  },
+
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'), 
+    require('@tailwindcss/aspect-ratio'), 
+  ],
+};

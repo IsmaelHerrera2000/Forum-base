@@ -1,5 +1,5 @@
 const express = require('express');
-const User = require('../models/user.model');
+const User = require('../models/User');
 const router = express.Router();
 
 /**
@@ -9,17 +9,27 @@ const router = express.Router();
  *     User:
  *       type: object
  *       required:
- *         - name
+ *         - username
+ *         - email
+ *         - password
  *       properties:
  *         id:
  *           type: string
  *           description: ID autogenerado del usuario
- *         name:
+ *         username:
  *           type: string
- *           description: Nombre del usuario
+ *           description: Nombre de usuario único
+ *         email:
+ *           type: string
+ *           description: Email del usuario
+ *         password:
+ *           type: string
+ *           description: Contraseña del usuario
  *       example:
  *         id: 60c72b2f5f1b2c001c8e4e67
- *         name: John Doe
+ *         username: JohnDoe
+ *         email: johndoe@example.com
+ *         password: 'hashedpassword123'
  */
 
 /**
@@ -46,11 +56,18 @@ const router = express.Router();
  */
 router.post('/users', async (req, res) => {
   try {
-    const user = new User({ name: req.body.name });
+    const { username, email, password } = req.body;
+
+    let existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ msg: 'El usuario con ese email ya existe' });
+    }
+
+    const user = new User({ username, email, password });
     await user.save();
-    res.status(201).send(user); 
+    res.status(201).send(user);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({ msg: 'Error al crear el usuario', error });
   }
 });
 
@@ -74,10 +91,10 @@ router.post('/users', async (req, res) => {
  */
 router.get('/users', async (req, res) => {
   try {
-    const users = await User.find(); 
-    res.send(users); 
+    const users = await User.find();
+    res.status(200).send(users);
   } catch (error) {
-    res.status(500).send(error); 
+    res.status(500).send({ msg: 'Error al obtener los usuarios', error });
   }
 });
 
@@ -100,12 +117,12 @@ router.get('/users', async (req, res) => {
  *         description: Error del servidor
  */
 router.get('/userssorted', async (req, res) => {
-    try {
-      const userssorted = await User.find().sort({ name: 1 }); 
-      res.send(userssorted);
-    } catch (error) {
-      res.status(500).send(error);
-    }
+  try {
+    const userssorted = await User.find().sort({ username: 1 });
+    res.status(200).send(userssorted);
+  } catch (error) {
+    res.status(500).send({ msg: 'Error al obtener los usuarios ordenados', error });
+  }
 });
 
 module.exports = router;
