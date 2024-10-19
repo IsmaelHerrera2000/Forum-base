@@ -15,6 +15,15 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  profileImage: {
+    type: String,  
+    default: 'https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_640.png'  
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'], 
+    default: 'user'
+  },
   createdAt: {
     type: Date,
     default: Date.now

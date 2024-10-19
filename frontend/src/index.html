@@ -13,16 +13,20 @@
   <nav class="bg-white shadow">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center">
       <div class="text-lg font-bold">
-        <a href="#" class="text-blue-600 hover:text-blue-800">Forum</a>
+        <a href="/" class="text-blue-600 hover:text-blue-800">Forum</a>
       </div>
-      <div class="space-x-4" id="nav-buttons">
-        <span id="user-info" class="hidden text-gray-600"></span>
+      <div class="space-x-4 flex items-center" id="nav-buttons">
+        <a id="user-info" href="#" class=" text-blue-500 hover:text-blue-700 font-semibold flex items-center">
+          <img id="profile-img" src="" alt="Imagen de perfil" class="w-8 h-8 rounded-full mr-2" />
+          <span id="welcome-text">Usuario</span>
+        </a>
         <button id="logout-btn" class="hidden text-gray-600 hover:text-blue-600">Salir</button>
         <a href="/login" id="login-btn" class="text-gray-600 hover:text-blue-600">Iniciar sesión</a>
         <a href="/register" id="register-btn" class="text-gray-600 hover:text-blue-600">Registrarse</a>
       </div>
     </div>
   </nav>
+  
 
   <div class="flex-grow container mx-auto px-4 py-8">
     <app-root></app-root>
@@ -47,16 +51,20 @@
       const logoutBtn = document.getElementById('logout-btn');
       const loginBtn = document.getElementById('login-btn');
       const registerBtn = document.getElementById('register-btn');
+      const profileImg = document.getElementById('profile-img');
+      const welcomeText = document.getElementById('welcome-text');
 
       const token = localStorage.getItem('token');
       if (token) {
-        userInfo.textContent = `Bienvenido, ${getUsername()}`; 
+        const { userId, username, profileImage } = getUserInfoFromToken(); 
+        welcomeText.textContent = `${username}`;
+        userInfo.href = `/profile/${userId}`; 
+        profileImg.src = profileImage; 
         userInfo.classList.remove('hidden');
         logoutBtn.classList.remove('hidden');
         loginBtn.classList.add('hidden');
         registerBtn.classList.add('hidden');
-
-
+  
         logoutBtn.onclick = () => {
           localStorage.removeItem('token'); 
           updateNavbar(); 
@@ -69,23 +77,27 @@
         registerBtn.classList.remove('hidden');
       }
     }
-
-    function getUsername() {
+  
+    function getUserInfoFromToken() {
       const token = localStorage.getItem('token');
       if (token) {
         const decodedToken = jwt_decode(token);
-        return decodedToken.username || 'Usuario';
+        const userId = decodedToken.userId;
+        const username = decodedToken.username || 'Usuario';
+        const profileImage = decodedToken.profileImage || 'https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_640.png'; 
+        return { userId, username, profileImage }; 
       }
-      return 'Usuario'; 
+      return { userId: null, username: 'Usuario', profileImage: '' }; 
     }
-
+  
     updateNavbar();
-
+  
     window.addEventListener('message', function(event) {
       if (event.data.type === 'user-updated') {
         updateNavbar();
       }
     });
   </script>
+  
 </body>
 </html>

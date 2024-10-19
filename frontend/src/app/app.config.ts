@@ -4,8 +4,8 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient } from '@angular/common/http';
-import { ToastrModule } from 'ngx-toastr'; // Importa ToastrModule
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Importa BrowserAnimationsModule
+import { ToastrModule } from 'ngx-toastr'; 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { importProvidersFrom } from '@angular/core';
 
 export const appConfig: ApplicationConfig = {
@@ -14,13 +14,13 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideRouter(routes),
     importProvidersFrom(
-      ToastrModule.forRoot({ // Configura ToastrModule
-        positionClass: 'toast-top-left', // Posición de las notificaciones
+      ToastrModule.forRoot({ 
+        positionClass: 'toast-top-left', 
         preventDuplicates: true,
         closeButton: true,
         progressBar: true,
       }),
-      BrowserAnimationsModule // Asegúrate de incluir este módulo
+      BrowserAnimationsModule 
     )
   ]
 };

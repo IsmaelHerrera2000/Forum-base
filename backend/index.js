@@ -37,10 +37,12 @@ const swaggerSpecs = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 const authRoutes = require('./routes/auth.routes');
-app.use('/api/auth', authRoutes);
-
 const userRoutes = require('./routes/user.routes');
+const profileRoutes = require('./routes/profile.routes'); 
+
+app.use('/api/auth', authRoutes);
 app.use('/api', userRoutes);
+app.use('/api', profileRoutes); 
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
