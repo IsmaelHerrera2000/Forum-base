@@ -1,59 +1,85 @@
 <div class="container mx-auto my-8 p-8 bg-white shadow-lg rounded-lg max-w-lg">
-    <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Perfil de {{ user.username }}</h2>
-    
-    <div class="flex flex-col items-center">
-        <img
-            [src]="user.profileImage"
-            alt="Imagen de perfil"
-            class="w-32 h-32 rounded-full shadow-md mb-4 border-4 border-blue-500"
-        />
-        <div *ngIf="!editMode" class="text-center">
-            <p class="text-lg text-gray-600"><strong>Email:</strong> {{ user.email }}</p>
-            <!-- Mostrar rol solo si el usuario es administrador -->
-            <p *ngIf="user.role === 'admin'" class="text-lg text-gray-600"><strong>Rol:</strong> {{ user.role }}</p>
-            <button
-                (click)="toggleEditMode()"
-                class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-                Editar perfil
-            </button>
-        </div>
+  <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">
+    Perfil de {{ user.username }}
+  </h2>
 
-        <div *ngIf="editMode" class="w-full mt-6">
-            <label class="block mb-1 text-gray-700" for="username">Nombre de usuario</label>
-            <input
-                [(ngModel)]="user.username"
-                id="username"
-                class="mb-4 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
-                placeholder="Nombre de usuario"
-            />
+  <div class="flex flex-col items-center">
+    <img
+      [src]="user.profileImage"
+      alt="Imagen de perfil"
+      class="w-32 h-32 rounded-full shadow-md mb-4 border-4 border-blue-500"
+    />
 
-            <label class="block mb-1 text-gray-700" for="email">Correo electrónico</label>
-            <input
-                [(ngModel)]="user.email"
-                id="email"
-                class="mb-4 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
-                placeholder="Correo electrónico"
-                type="email"
-                (input)="validateEmail(user.email)" 
-            />
-            <p *ngIf="!emailValid" class="text-red-500 text-sm mb-2">Por favor, introduce un correo electrónico válido.</p> <!-- Mensaje de error -->
+    <div *ngIf="!editMode" class="text-center">
+      <p class="text-lg text-gray-600">
+        <strong>Email:</strong> {{ user.email }}
+      </p>
 
-            <label class="block mb-1 text-gray-700" for="profileImage">URL de la imagen de perfil</label>
-            <input
-                [(ngModel)]="user.profileImage"
-                id="profileImage"
-                class="mb-4 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
-                placeholder="URL de la imagen de perfil"
-            />
-            <p *ngIf="!imageUrlValid" class="text-red-500 text-sm mb-2">Por favor, introduce una URL válida para la imagen de perfil.</p> <!-- Mensaje de error -->
-            
-            <button
-                (click)="saveProfile()"
-                class="mt-4 w-full px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-400"
-            >
-                Guardar cambios
-            </button>
-        </div>
+      <p *ngIf="user.role === 'admin'" class="text-lg text-gray-600">
+        <strong>Rol:</strong> {{ user.role }}
+      </p>
+
+      <button
+        (click)="toggleEditMode()"
+        class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+      >
+        Editar perfil
+      </button>
+
+      <button
+        *ngIf="canDeleteProfile()"
+        (click)="deleteProfile()"
+        class="mt-4 px-6 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-400"
+      >
+        Eliminar cuenta
+      </button>
     </div>
+
+    <div *ngIf="editMode" class="w-full mt-6">
+      <label class="block mb-1 text-gray-700" for="username"
+        >Nombre de usuario</label
+      >
+      <input
+        [(ngModel)]="user.username"
+        id="username"
+        class="mb-4 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
+        placeholder="Nombre de usuario"
+      />
+
+      <label class="block mb-1 text-gray-700" for="email"
+        >Correo electrónico</label
+      >
+      <input
+        [(ngModel)]="user.email"
+        id="email"
+        class="mb-4 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
+        placeholder="Correo electrónico"
+        type="email"
+        (input)="validateEmail(user.email)"
+      />
+      <p *ngIf="!emailValid" class="text-red-500 text-sm mb-2">
+        Por favor, introduce un correo electrónico válido.
+      </p>
+
+      <label class="block mb-1 text-gray-700" for="profileImage"
+        >URL de la imagen de perfil</label
+      >
+      <input
+        [(ngModel)]="user.profileImage"
+        id="profileImage"
+        class="mb-4 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
+        placeholder="URL de la imagen de perfil"
+      />
+      <p *ngIf="!imageUrlValid" class="text-red-500 text-sm mb-2">
+        Por favor, introduce una URL válida para la imagen de perfil.
+      </p>
+
+      <button
+        (click)="saveProfile()"
+        class="mt-4 w-full px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-400"
+      >
+        Guardar cambios
+      </button>
+    </div>
+  </div>
 </div>

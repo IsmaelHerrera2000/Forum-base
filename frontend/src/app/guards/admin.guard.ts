@@ -10,18 +10,16 @@ import { AuthService } from '../services/auth.service';
 @Injectable({
   providedIn: 'root',
 })
-export class roleGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(
-    route: ActivatedRouteSnapshot,
+    next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
     const user = this.authService.getLoggedUser();
-    const userIdFromRoute = route.paramMap.get('userId');
-    console.log('Usuario logueado:', user);
-    console.log('ID de usuario desde la ruta:', user.role);
-    if (user && (user.role === 'admin' || user.userId === userIdFromRoute)) {
+
+    if (user && user.role === 'admin') {
       return true;
     } else {
       this.router.navigate(['/unauthorized']);

@@ -1,0 +1,51 @@
+<div class="container mx-auto my-8 p-8 bg-white shadow-lg rounded-lg max-w-4xl">
+  <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">
+    Panel de Administración
+  </h2>
+
+  <table class="w-full table-auto">
+    <thead>
+      <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+        <th class="py-3 px-6 text-left">Foto de Perfil</th>
+        <th class="py-3 px-6 text-left">Nombre de Usuario</th>
+        <th class="py-3 px-6 text-left">Correo Electrónico</th>
+        <th class="py-3 px-6 text-left">Rol</th>
+        <th class="py-3 px-6 text-left">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let user of users"
+        class="border-b border-gray-200 hover:bg-gray-100"
+      >
+        <td class="py-3 px-6">
+          <img
+            [src]="
+              user.profileImage ||
+              'https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_640.png'
+            "
+            alt="Foto de {{ user.username }}"
+            class="w-10 h-10 rounded-full"
+          />
+        </td>
+        <td class="py-3 px-6">
+          <a
+            (click)="goToProfile(user._id)"
+            class="text-blue-500 hover:underline cursor-pointer"
+            >{{ user.username }}</a
+          >
+        </td>
+        <td class="py-3 px-6">{{ user.email }}</td>
+        <td class="py-3 px-6">{{ user.role }}</td>
+        <td class="py-3 px-6">
+          <button
+            (click)="goToProfile(user._id)"
+            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
+          >
+            Ver Perfil
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

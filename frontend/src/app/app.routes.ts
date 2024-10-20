@@ -7,18 +7,24 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { AdminGuard } from './guards/admin.guard';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 
 export const routes: Routes = [
   { path: '', component: WelcomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { 
-    path: 'profile/:userId', 
-    component: ProfileComponent, 
-    canActivate: [AuthGuard, roleGuard]
+  {
+    path: 'profile/:userId',
+    component: ProfileComponent,
+    canActivate: [AuthGuard, roleGuard],
   },
-  { path: 'unauthorized', component: UnauthorizedComponent }
-,
+  { path: 'unauthorized', component: UnauthorizedComponent },
+  {
+    path: 'admin-dashboard',
+    component: AdminDashboardComponent,
+    canActivate: [AdminGuard],
+  },
 ];
 
 @NgModule({

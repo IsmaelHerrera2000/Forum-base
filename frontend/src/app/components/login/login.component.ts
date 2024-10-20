@@ -1,39 +1,39 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router'; 
-import { ToastrService } from 'ngx-toastr'; 
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [FormsModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'] 
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   email: string = '';
   password: string = '';
 
   constructor(
-    private authService: AuthService, 
-    private router: Router, 
-    private toastr: ToastrService 
+    private authService: AuthService,
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   onSubmit() {
     const credentials = {
       email: this.email,
-      password: this.password
+      password: this.password,
     };
 
     this.authService.login(credentials).subscribe(
-      response => {
+      (response) => {
         this.authService.saveToken(response.token);
         console.log('Inicio de sesión exitoso');
-        this.router.navigate(['/']); 
-      }, 
-      error => {
+        this.router.navigate(['/']);
+      },
+      (error) => {
         console.error(error);
         this.toastr.error('Error en el inicio de sesión', '¡Oops!', {
           timeOut: 3000,

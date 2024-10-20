@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../models/User');
+const { authMiddleware, adminMiddleware } = require('../middleware/auth'); 
 const router = express.Router();
 
 /**
@@ -89,11 +90,12 @@ router.post('/users', async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
-router.get('/users', async (req, res) => {
+router.get('/users', authMiddleware, adminMiddleware, async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find().select('username email role profileImage');
     res.status(200).send(users);
   } catch (error) {
+    console.error(error);
     res.status(500).send({ msg: 'Error al obtener los usuarios', error });
   }
 });
@@ -116,7 +118,7 @@ router.get('/users', async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
-router.get('/userssorted', async (req, res) => {
+router.get('/userssorted', adminMiddleware, async (req, res) => {
   try {
     const userssorted = await User.find().sort({ username: 1 });
     res.status(200).send(userssorted);

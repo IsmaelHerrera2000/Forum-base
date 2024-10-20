@@ -39,4 +39,19 @@ router.put('/profile/:userId', authMiddleware, async (req, res) => {
   }
 });
 
+router.delete('/profile/:userId', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) return res.status(404).json({ msg: 'Usuario no encontrado' });
+
+    if (req.user.userId !== req.params.userId && req.user.role !== 'admin') {
+      return res.status(403).json({ msg: 'No autorizado' });
+    }
+
+    await user.deleteOne();
+    res.json({ msg: 'Cuenta eliminada con éxito' });
+  } catch (error) {
+    res.status(500).send('Error en el servidor');
+  }
+});
 module.exports = router;

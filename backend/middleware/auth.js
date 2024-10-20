@@ -9,7 +9,6 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     req.user = decoded;
 
     next();
@@ -20,10 +19,12 @@ const authMiddleware = (req, res, next) => {
 };
 
 const adminMiddleware = (req, res, next) => {
-  if (req.user.role !== 'admin') {
+  
+  if (!req.user || req.user.role !== 'admin') {
     return res.status(403).json({ msg: 'Acceso denegado, necesitas privilegios de administrador' });
   }
   next();
 };
+
 
 module.exports = { authMiddleware, adminMiddleware };
