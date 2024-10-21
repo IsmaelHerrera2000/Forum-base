@@ -154,17 +154,6 @@
           updateNavbar();
         }
       });
-
-      window.addEventListener("message", function (event) {
-        if (event.data.type === "user-updated") {
-          const updatedUser = event.data.user;
-          const profileImg = document.getElementById("profile-img");
-          const welcomeText = document.getElementById("welcome-text");
-
-          profileImg.src = updatedUser.profileImage;
-          welcomeText.textContent = updatedUser.username;
-        }
-      });
     </script>
   </body>
 </html>

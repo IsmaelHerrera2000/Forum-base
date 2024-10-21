@@ -3,6 +3,15 @@
     Panel de Administración
   </h2>
 
+  <div class="mb-4 flex justify-end">
+    <button
+      (click)="openAddUserModal()"
+      class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+    >
+      Añadir Usuario
+    </button>
+  </div>
+
   <table class="w-full table-auto">
     <thead>
       <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
@@ -48,4 +57,94 @@
       </tr>
     </tbody>
   </table>
+
+  <div class="flex justify-center mt-4">
+    <button
+      (click)="changePage(currentPage - 1)"
+      [disabled]="currentPage === 1"
+      class="px-3 py-1 mx-1 bg-gray-300 rounded hover:bg-gray-400"
+    >
+      Anterior
+    </button>
+    <span class="px-3 py-1 mx-1">{{ currentPage }}</span>
+    <button
+      (click)="changePage(currentPage + 1)"
+      [disabled]="currentPage * pageSize >= totalUsers"
+      class="px-3 py-1 mx-1 bg-gray-300 rounded hover:bg-gray-400"
+    >
+      Siguiente
+    </button>
+  </div>
+
+  <div
+    *ngIf="showAddUserModal"
+    class="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-75"
+  >
+    <div class="bg-white p-6 rounded-lg max-w-md w-full">
+      <h3 class="text-2xl mb-4">Añadir Nuevo Usuario</h3>
+
+      <form (ngSubmit)="addUser()">
+        <div class="mb-4">
+          <label class="block text-gray-700">Nombre de Usuario</label>
+          <input
+            [(ngModel)]="newUser.username"
+            name="username"
+            class="w-full border px-3 py-2 rounded"
+            required
+          />
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-gray-700">Correo Electrónico</label>
+          <input
+            [(ngModel)]="newUser.email"
+            name="email"
+            type="email"
+            class="w-full border px-3 py-2 rounded"
+            required
+          />
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-gray-700">Contraseña</label>
+          <input
+            [(ngModel)]="newUser.password"
+            name="password"
+            type="password"
+            class="w-full border px-3 py-2 rounded"
+            required
+          />
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-gray-700">Rol</label>
+          <select
+            [(ngModel)]="newUser.role"
+            name="role"
+            class="w-full border px-3 py-2 rounded"
+            required
+          >
+            <option value="user">Usuario</option>
+            <option value="admin">Administrador</option>
+          </select>
+        </div>
+
+        <div class="flex justify-end">
+          <button
+            type="button"
+            (click)="closeAddUserModal()"
+            class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 mr-2"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            Crear
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

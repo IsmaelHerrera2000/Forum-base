@@ -92,8 +92,22 @@ router.post('/users', async (req, res) => {
  */
 router.get('/users', authMiddleware, adminMiddleware, async (req, res) => {
   try {
-    const users = await User.find().select('username email role profileImage');
-    res.status(200).send(users);
+    const page = parseInt(req.query.page) || 1; 
+    const pageSize = parseInt(req.query.pageSize) || 10; 
+
+    const totalUsers = await User.countDocuments();
+
+    const users = await User.find()
+      .select('username email role profileImage') 
+      .skip((page - 1) * pageSize) 
+      .limit(pageSize); 
+
+    res.status(200).json({
+      users,
+      total: totalUsers,
+      currentPage: page,
+      totalPages: Math.ceil(totalUsers / pageSize), 
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send({ msg: 'Error al obtener los usuarios', error });

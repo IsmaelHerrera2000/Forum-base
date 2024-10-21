@@ -95,13 +95,20 @@ export class AuthService {
     return this.http.delete(`${this.profileUrl}/${userId}`, { headers });
   }
 
-  getAllUsers(): Observable<any> {
+  getAllUsers(page: number = 1, pageSize: number = 10): Observable<any> {
     const headers = this.createAuthHeaders();
-    return this.http.get(`http://localhost:5000/api/users`, { headers }).pipe(
+    return this.http.get(`http://localhost:5000/api/users?page=${page}&pageSize=${pageSize}`, { headers }).pipe(
       catchError((error) => {
         console.error('Error al obtener usuarios:', error);
         return throwError('No se pudieron obtener los usuarios.');
       })
     );
   }
+
+  addUser(userData: any): Observable<any> {
+    const headers = this.createAuthHeaders();
+    return this.http.post('http://localhost:5000/api/users', userData, { headers });
+  }
+  
+  
 }
