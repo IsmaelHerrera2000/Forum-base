@@ -9,6 +9,10 @@ import { roleGuard } from './guards/role.guard';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { AdminGuard } from './guards/admin.guard';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { ForumSectionsComponent } from './components/forum-sections/forum-sections.component';
+import { ForumPostsComponent } from './components/forum-posts/forum-posts.component';
+import { ForumPostDetailComponent } from './components/forum-post-detail/forum-post-detail.component';
+import { ForumCreateSectionComponent } from './components/forum-create-section/forum-create-section.component';
 
 export const routes: Routes = [
   { path: '', component: WelcomeComponent },
@@ -25,6 +29,10 @@ export const routes: Routes = [
     component: AdminDashboardComponent,
     canActivate: [AdminGuard],
   },
+  { path: 'forum', component: ForumSectionsComponent },
+  { path: 'forum/sections/:sectionId/posts', component: ForumPostsComponent },
+  { path: 'forum/posts/:postId', component: ForumPostDetailComponent },
+  { path: 'forum/create-section', component: ForumCreateSectionComponent } ,
 ];
 
 @NgModule({

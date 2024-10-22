@@ -1,0 +1,24 @@
+<div class="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+  <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Secciones del Foro</h2>
+  
+  <div *ngIf="isAdmin" class="text-right mb-4">
+    <button 
+      (click)="navigateToCreateSection()" 
+      class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 transition duration-300">
+      Crear Nueva Sección
+    </button>
+  </div>
+
+  <ul class="space-y-4">
+    <li *ngFor="let section of sections">
+      <a 
+        (click)="goToPosts(section._id)" 
+        class="block p-4 bg-blue-100 rounded-lg shadow hover:bg-blue-200 transition duration-300">
+        <div class="flex flex-col">
+          <span class="text-xl text-blue-600 font-semibold cursor-pointer">{{ section.name }}</span>
+          <span class="text-gray-700 mt-1">{{ section.description }}</span>
+        </div>
+      </a>
+    </li>
+  </ul>
+</div>

@@ -38,11 +38,19 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
-const profileRoutes = require('./routes/profile.routes'); 
+const profileRoutes = require('./routes/profile.routes');
+
+const sectionRoutes = require('./routes/section.routes'); 
+const postRoutes = require('./routes/post.routes');
+const commentRoutes = require('./routes/comment.routes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api', userRoutes);
-app.use('/api', profileRoutes); 
+app.use('/api', profileRoutes);
+
+app.use('/api', sectionRoutes);  
+app.use('/api', postRoutes);     
+app.use('/api', commentRoutes);  
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

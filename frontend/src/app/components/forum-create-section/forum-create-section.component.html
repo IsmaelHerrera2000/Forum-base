@@ -1,0 +1,37 @@
+<div *ngIf="isAdmin" class="container mx-auto my-8 p-8 bg-white shadow-lg rounded-lg max-w-md">
+    <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Crear Nueva Sección</h2>
+
+    <form (ngSubmit)="createSection()">
+        <div class="mb-4">
+            <label for="sectionName" class="block text-gray-700 font-bold mb-2">Nombre de la Sección</label>
+            <input
+                type="text"
+                id="sectionName"
+                [(ngModel)]="sectionName"
+                name="sectionName"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="Introduce el nombre de la sección"
+            />
+        </div>
+
+        <div class="mb-4">
+            <label for="sectionDescription" class="block text-gray-700 font-bold mb-2">Descripción de la Sección</label>
+            <textarea
+                id="sectionDescription"
+                [(ngModel)]="sectionDescription"
+                name="sectionDescription"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="Introduce la descripción de la sección"
+            ></textarea>
+        </div>
+
+        <div class="flex justify-center">
+            <button
+                type="submit"
+                class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+            >
+                Crear Sección
+            </button>
+        </div>
+    </form>
+</div>

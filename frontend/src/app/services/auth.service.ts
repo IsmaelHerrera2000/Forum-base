@@ -73,12 +73,17 @@ export class AuthService {
     });
   }
 
-  private createAuthHeaders(): HttpHeaders {
-    const token = this.getToken();
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
+  createAuthHeaders(): HttpHeaders {
+    const token = this.getToken(); 
+    if (token) {
+      return new HttpHeaders({
+        Authorization: `Bearer ${token}`
+      });
+    } else {
+      return new HttpHeaders();
+    }
   }
+  
 
   getLoggedUser(): any {
     if (isPlatformBrowser(this.platformId)) {
@@ -110,5 +115,15 @@ export class AuthService {
     return this.http.post('http://localhost:5000/api/users', userData, { headers });
   }
   
+  isAdmin(): boolean {
+    if (isPlatformBrowser(this.platformId)) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const decodedToken: any = jwtDecode(token);
+        return decodedToken.role === 'admin';
+      }
+    }
+    return false;
+  }
   
 }
