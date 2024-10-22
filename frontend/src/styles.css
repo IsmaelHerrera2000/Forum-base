@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.toast-top-left {
+    position: fixed !important;
+    top: 70px;
+    left: 10px;
+    z-index: 1050;
+}
+
+.toast {
+    opacity: 1 !important;
+    @apply bg-white shadow-lg rounded-lg p-4 text-gray-800;
+    @apply border-l-4 border-blue-500;
+    @apply transition-transform duration-300 ease-in-out;
+}
+
+.toast-success {
+    @apply border-l-4 border-green-500;
+}
+
+.toast-error {
+    @apply border-l-4 border-red-500;
+}
+
+.toast-warning {
+    @apply border-l-4 border-yellow-500;
+}
+
+.toast-info {
+    @apply border-l-4 border-blue-300;
+}
+
+.toast .ngx-toastr-icon {
+    @apply mr-2 text-xl;
+}
+
+.toast-title {
+    @apply font-bold mb-1;
+}
+
+.toast-message {
+    @apply text-sm;
+}
+
+.toast .toast-close-button {
+    @apply text-gray-400 hover:text-gray-600;
+}
+
+.toast .toast-close-button:hover {
+    @apply text-gray-600;
+}

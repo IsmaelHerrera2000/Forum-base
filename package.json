@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "commitlint": "commitlint --from=HEAD~1 --to=HEAD"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13"
+  }
+}

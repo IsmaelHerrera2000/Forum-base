@@ -1,0 +1,61 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+    <h2 class="mb-6 text-3xl font-bold text-center text-gray-800">
+      Registrarse
+    </h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="mb-5">
+        <input
+          type="text"
+          [(ngModel)]="username"
+          name="username"
+          placeholder="Nombre de usuario"
+          required
+          class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+        />
+      </div>
+      <div class="mb-5">
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Email"
+          required
+          (input)="emailValid = validateEmail(email)"
+          class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+        />
+        <p *ngIf="!emailValid" class="mt-1 text-red-500 text-sm">
+          Por favor, introduce un email válido.
+        </p>
+      </div>
+      <div class="mb-5">
+        <input
+          [type]="passwordVisible ? 'text' : 'password'"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Contraseña"
+          required
+          (input)="passwordValid = validatePassword(password)"
+          class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+        />
+        <p *ngIf="!passwordValid" class="mt-1 text-red-500 text-sm">
+          La contraseña debe tener al menos 6 caracteres, un número y una
+          mayúscula.
+        </p>
+        <button
+          type="button"
+          (click)="togglePasswordVisibility()"
+          class="mt-2 text-blue-600 hover:underline text-sm"
+        >
+          {{ passwordVisible ? "Ocultar" : "Mostrar" }} contraseña
+        </button>
+      </div>
+      <button
+        type="submit"
+        class="w-full p-4 mt-4 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-500 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        Registrarse
+      </button>
+    </form>
+  </div>
+</div>

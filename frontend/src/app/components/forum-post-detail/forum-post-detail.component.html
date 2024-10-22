@@ -1,0 +1,106 @@
+<div class="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+  <div class="border-b border-gray-300 pb-4 mb-6">
+    <h2 class="text-4xl font-bold text-gray-800 mb-2">{{ post?.title }}</h2>
+    <p class="text-sm text-gray-500">
+      Publicado el {{ post?.createdAt | date : "shortDate" }} por
+      <a
+        *ngIf="post?.author?._id"
+        [routerLink]="['/profile', post?.author?._id]"
+        class="text-blue-600 hover:underline"
+      >
+        {{ post?.author?.username }}
+      </a>
+    </p>
+  </div>
+
+  <div class="bg-gray-50 p-6 mb-6 rounded-lg shadow-inner">
+    <p class="text-lg text-gray-700 leading-relaxed">{{ post?.content }}</p>
+  </div>
+
+  <div class="comments-section mb-6">
+    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Comentarios</h3>
+
+    <ul class="space-y-4">
+      <li
+        *ngFor="let comment of paginatedComments"
+        class="bg-gray-100 p-4 rounded-md shadow flex items-start"
+      >
+        <div class="mr-6 text-center flex-shrink-0">
+          <a
+            *ngIf="comment?.author?._id"
+            [routerLink]="['/profile', comment?.author?._id]"
+            class="block mb-2"
+          >
+            <img
+              *ngIf="comment?.author?.profileImage"
+              [src]="comment?.author?.profileImage"
+              alt="{{ comment?.author?.username }}"
+              class="w-20 h-20 rounded-full"
+            />
+          </a>
+          <a
+            *ngIf="comment?.author?._id"
+            [routerLink]="['/profile', comment?.author?._id]"
+            class="text-blue-600 hover:underline"
+          >
+            <strong>{{ comment?.author?.username }}</strong>
+          </a>
+        </div>
+        <div class="flex-1">
+          <p class="text-gray-700">{{ comment?.content }}</p>
+        </div>
+      </li>
+    </ul>
+
+    <div *ngIf="totalPages > 1" class="pagination flex justify-center mt-6">
+      <button
+        *ngFor="let page of paginationArray"
+        (click)="goToPage(page)"
+        [class.bg-blue-500]="currentPage === page"
+        class="bg-gray-300 px-4 py-2 mx-1 rounded hover:bg-gray-400"
+      >
+        {{ page }}
+      </button>
+    </div>
+  </div>
+
+  <div class="add-comment bg-gray-50 p-4 rounded-md shadow flex items-start">
+    <div class="mr-4 text-center flex-shrink-0 flex flex-col items-center">
+      <a
+        *ngIf="currentUser?.profileImage"
+        [routerLink]="['/profile', currentUser?.userId]"
+        class="block mb-1"
+      >
+        <img
+          [src]="currentUser?.profileImage"
+          alt="{{ currentUser?.username }}"
+          class="w-16 h-16 rounded-full"
+        />
+      </a>
+      <a
+        *ngIf="currentUser?.userId"
+        [routerLink]="['/profile', currentUser?.userId]"
+        class="text-blue-600 hover:underline"
+      >
+        <strong class="mt-1">{{ currentUser?.username }}</strong>
+      </a>
+    </div>
+    <div class="flex-1">
+      <h4 class="text-xl font-semibold text-gray-800 mb-2">
+        Añadir comentario
+      </h4>
+      <textarea
+        [(ngModel)]="newComment"
+        rows="3"
+        class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-blue-300 transition duration-300"
+        placeholder="Escribe tu comentario aquí..."
+      ></textarea>
+      <button
+        (click)="addComment()"
+        class="bg-blue-500 text-white px-4 py-2 mt-2 rounded-lg hover:bg-blue-600 transition duration-300"
+      >
+        Enviar
+      </button>
+    </div>
+  </div>
+</div>

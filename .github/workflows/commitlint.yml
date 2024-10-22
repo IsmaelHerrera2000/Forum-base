@@ -1,0 +1,41 @@
+name: Commitlint
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code with a fetch depth of 2
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      # Step 3: Install Commitlint dependencies
+      - name: Install Commitlint dependencies
+        run: |
+          npm install --save-dev @commitlint/config-conventional @commitlint/cli
+
+      # Step 4: Add execute permissions for Commitlint
+      - name: Grant execute permissions
+        run: chmod +x ./node_modules/.bin/commitlint
+
+      # Step 5: Run Commitlint
+      - name: Run Commitlint
+        run: ./node_modules/.bin/commitlint --from=HEAD~1 --to=HEAD

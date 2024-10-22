@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Forum</title>
+    <base href="/" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMF8tM4GpF2qEd8AY5+uW9aXf6V5j1wjlwiA4m"
+      crossorigin="anonymous"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="font-roboto bg-gray-100 text-gray-800 flex flex-col min-h-screen"
+  >
+    <nav class="bg-white shadow">
+      <div
+        class="container mx-auto px-4 py-4 flex justify-between items-center"
+      >
+        <div class="text-lg font-bold">
+          <a href="/" class="text-blue-600 hover:text-blue-800">Forum</a>
+        </div>
+        <div class="space-x-4 flex items-center" id="nav-buttons">
+          <a
+            id="admin-dashboard"
+            href="/admin-dashboard"
+            class="hidden text-blue-600 hover:text-blue-800"
+            >Dashboard</a
+          >
+          <a
+            id="user-info"
+            href="#"
+            class="text-blue-500 hover:text-blue-700 font-semibold flex items-center"
+          >
+            <img
+              id="profile-img"
+              src=""
+              alt="Imagen de perfil"
+              class="w-8 h-8 rounded-full mr-2"
+            />
+            <span id="welcome-text">Usuario</span>
+          </a>
+          <button
+            id="logout-btn"
+            class="hidden text-gray-600 hover:text-blue-600"
+          >
+            Salir
+          </button>
+          <a
+            href="/login"
+            id="login-btn"
+            class="text-gray-600 hover:text-blue-600"
+            >Iniciar sesión</a
+          >
+          <a
+            href="/register"
+            id="register-btn"
+            class="text-gray-600 hover:text-blue-600"
+            >Registrarse</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <div class="flex-grow container mx-auto px-4 py-8">
+      <app-root></app-root>
+    </div>
+
+    <footer class="bg-gray-800 text-white py-6 mt-10 relative z-0">
+      <div class="container mx-auto text-center">
+        <p class="mb-2">© 2024 Nombre_Foro. Todos los derechos reservados.</p>
+        <div class="space-x-4">
+          <a href="#" class="hover:underline">Política de privacidad</a>
+          <a href="#" class="hover:underline">Términos del servicio</a>
+          <a href="#" class="hover:underline">Soporte</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.js"></script>
+    <script>
+      function updateNavbar() {
+        const userInfo = document.getElementById("user-info");
+        const logoutBtn = document.getElementById("logout-btn");
+        const loginBtn = document.getElementById("login-btn");
+        const registerBtn = document.getElementById("register-btn");
+        const profileImg = document.getElementById("profile-img");
+        const welcomeText = document.getElementById("welcome-text");
+        const adminDashboard = document.getElementById("admin-dashboard");
+
+        const token = localStorage.getItem("token");
+        if (token) {
+          const { userId, username, profileImage, role } =
+            getUserInfoFromToken();
+          welcomeText.textContent = `${username}`;
+          userInfo.href = `/profile/${userId}`;
+          profileImg.src = profileImage;
+          userInfo.classList.remove("hidden");
+          logoutBtn.classList.remove("hidden");
+          loginBtn.classList.add("hidden");
+          registerBtn.classList.add("hidden");
+
+          if (role === "admin") {
+            adminDashboard.classList.remove("hidden");
+          } else {
+            adminDashboard.classList.add("hidden");
+          }
+
+          logoutBtn.onclick = () => {
+            localStorage.removeItem("token");
+            updateNavbar();
+            window.location.href = "/";
+          };
+        } else {
+          userInfo.classList.add("hidden");
+          logoutBtn.classList.add("hidden");
+          loginBtn.classList.remove("hidden");
+          registerBtn.classList.remove("hidden");
+          adminDashboard.classList.add("hidden");
+        }
+      }
+
+      function getUserInfoFromToken() {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const decodedToken = jwt_decode(token);
+          const userId = decodedToken.userId;
+          const username = decodedToken.username || "Usuario";
+          const profileImage =
+            decodedToken.profileImage ||
+            "https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_640.png";
+          const role = decodedToken.role || "user";
+          return { userId, username, profileImage, role };
+        }
+        return {
+          userId: null,
+          username: "Usuario",
+          profileImage: "",
+          role: "user",
+        };
+      }
+
+      updateNavbar();
+
+      window.addEventListener("message", function (event) {
+        if (event.data.type === "user-updated") {
+          updateNavbar();
+        }
+      });
+    </script>
+  </body>
+</html>
